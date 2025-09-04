@@ -6,4 +6,8 @@ resource "helm_release" "prometheus" {
   create_namespace = true
 
   values = [file("${path.module}/values-prometheus.yaml")]
+  depends_on = [
+    aws_eks_node_group.ng
+  ]
 }
+
