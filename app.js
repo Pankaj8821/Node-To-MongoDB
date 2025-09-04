@@ -55,7 +55,6 @@ process.on("SIGINT", () => {
     });
   });
 });
-
 process.on("SIGTERM", () => {
   console.log("🛑 SIGTERM received, shutting down server...");
   server.close(() => {
