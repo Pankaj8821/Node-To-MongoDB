@@ -2,15 +2,18 @@
 # Enable OIDC for EKS
 ###########################
 
+data "tls_certificate" "oidc_thumbprint" {
+  url = aws_eks_cluster.eks.identity[0].oidc[0].issuer
+}
+
 resource "aws_iam_openid_connect_provider" "oidc" {
   url             = aws_eks_cluster.eks.identity[0].oidc[0].issuer
   client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0afd60e1d"]
+  thumbprint_list = [data.tls_certificate.oidc_thumbprint.certificates[0].sha1_fingerprint]
 }
 
 ###########################
 # IAM Role for ALB Controller (IRSA)
-#"Terraform block defines a IAM policy document (data "aws_iam_policy_document") that allows the AWS ALB Ingress Controller (or AWS Load Balancer Controller) running in your EKS cluster to assume an IAM role using OIDC (OpenID Connect)."
 ###########################
 
 data "aws_iam_policy_document" "alb_assume_role" {
@@ -48,6 +51,20 @@ resource "aws_iam_role_policy_attachment" "alb_attach" {
 }
 
 ###########################
+# Kubernetes ServiceAccount for ALB Controller
+###########################
+
+resource "kubernetes_service_account" "alb_controller" {
+  metadata {
+    name      = "alb-ingress-controller"
+    namespace = "kube-system"
+    annotations = {
+      "eks.amazonaws.com/role-arn" = aws_iam_role.alb_ingress_role.arn
+    }
+  }
+}
+
+###########################
 # Install ALB Ingress Controller via Helm
 ###########################
 
@@ -60,25 +77,47 @@ provider "helm" {
 }
 
 resource "helm_release" "aws_lb_controller" {
-  name       = "aws-load-balancer-controller"
-  repository = "https://aws.github.io/eks-charts"
-  chart      = "aws-load-balancer-controller"
-  namespace  = "kube-system"
-  version    = var.alb_controller_version
+  name             = "aws-load-balancer-controller"
+  repository       = "https://aws.github.io/eks-charts"
+  chart            = "aws-load-balancer-controller"
+  namespace        = "kube-system"
+  version          = var.alb_controller_version
   create_namespace = false
+  timeout          = 600
 
-  values = [
-    <<EOF
-clusterName: ${var.cluster_name}
-serviceAccount:
-  create: true
-  name: alb-ingress-controller
-  annotations:
-    eks.amazonaws.com/role-arn: ${aws_iam_role.alb_ingress_role.arn}
-region: ${var.region}
-vpcId: ${aws_vpc.main.id}
-EOF
+  set {
+    name  = "clusterName"
+    value = var.cluster_name
+  }
+
+  set {
+    name  = "region"
+    value = var.region
+  }
+
+  set {
+    name  = "vpcId"
+    value = aws_vpc.main.id
+  }
+
+  set {
+    name  = "serviceAccount.create"
+    value = "false"
+  }
+
+  set {
+    name  = "serviceAccount.name"
+    value = kubernetes_service_account.alb_controller.metadata[0].name
+  }
+
+  set {
+    name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = aws_iam_role.alb_ingress_role.arn
+  }
+
+  depends_on = [
+    aws_iam_openid_connect_provider.oidc,
+    aws_iam_role_policy_attachment.alb_attach,
+    kubernetes_service_account.alb_controller
   ]
-
-  depends_on = [aws_iam_role_policy_attachment.alb_attach]
 }
