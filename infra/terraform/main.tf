@@ -21,7 +21,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_eip" "nat_eip" {
-  vpc = true
+  domain = "vpc"
 }
 
 resource "aws_nat_gateway" "nat_gw" {
@@ -104,4 +104,5 @@ resource "aws_route_table_association" "private_assoc" {
 data "aws_availability_zones" "available" {
   state = "available"
 }
+
 
