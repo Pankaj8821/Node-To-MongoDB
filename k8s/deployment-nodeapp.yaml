@@ -1,0 +1,64 @@
+# Nodeapp Deployment 
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp
+  namespace: app
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nodeapp
+  template:
+    metadata:
+      labels:
+        app: nodeapp
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      automountServiceAccountToken: false
+      containers:
+        - name: nodeapp
+          image: pankaj6262/nodeapp:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: MONGO_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: username
+            - name: MONGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mongodb-secret
+                  key: password
+            - name: MONGO_HOST
+              value: mongodb.app.svc.cluster.local
+            - name: MONGO_PORT
+              value: "27017"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+
+---
+
+# Nodeapp Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeapp
+  namespace: app
+spec:
+  type: ClusterIP
+  selector:
+    app: nodeapp
+  ports:
+    - port: 3000
+      targetPort: 3000
