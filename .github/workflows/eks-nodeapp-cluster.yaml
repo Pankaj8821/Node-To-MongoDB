@@ -1,0 +1,68 @@
+# Setup AWS & Terraform
+name: Eks-nodeapp-terraform-cluster
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ap-south-1     # AWS region
+      CLUSTER_NAME: my-eks-cluster1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
+
+      # Terraform Init
+      - name: Terraform Init for EKS
+        working-directory: infra/terraform
+        run: terraform init -reconfigure
+
+      # Check if EKS cluster exists
+      - name: Check EKS Cluster
+        id: check
+        run: |
+          if aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Terraform Apply ONLY if cluster does not exist
+      - name: Terraform Apply for EKS (create cluster)
+        if: steps.check.outputs.exists == 'false'
+        working-directory: infra/terraform
+        run: terraform apply -auto-approve
+
+      # Terraform Apply if cluster already exists (update only)
+      - name: Terraform Apply for EKS (update cluster)
+        if: steps.check.outputs.exists == 'true'
+        working-directory: infra/terraform
+        run: terraform apply -auto-approve
+
+      # Install kubectl
+      - name: Install kubectl
+        run: |
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+      # Configure kubectl with EKS
+      - name: Configure kubectl with EKS
+        run: |
+          aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
