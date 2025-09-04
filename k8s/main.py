@@ -120,7 +120,7 @@ spec:
       automountServiceAccountToken: false
       containers:
         - name: nodeapp
-          image: shailesh49/nodeapp:latest
+          image: pankaj6262/nodeapp:latest
           ports:
             - containerPort: 3000
           env:
