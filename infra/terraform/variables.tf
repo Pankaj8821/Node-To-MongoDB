@@ -13,7 +13,7 @@ variable "vpc_cidr" {
 variable "cluster_name" {
   description = "EKS Cluster name"
   type        = string
-  default     = "my-eks-cluster1"
+  default     = "eks-nodeapp-cluster"
 }
 
 variable "node_instance_type" {
@@ -45,4 +45,5 @@ variable "tags" {
     Terraform   = "true"
   }
 }
+
 
