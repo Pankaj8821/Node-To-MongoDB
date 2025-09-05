@@ -1,15 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-ingres
+  name: nodeapp-ingress
   namespace: app
   annotations:
-    alb.ingress.kubernetes.io/group.name: app-group
-    alb.ingress.kubernetes.io/load-balancer-name: app-lb
+    kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+    alb.ingress.kubernetes.io/healthcheck-path: /healthz
+    alb.ingress.kubernetes.io/healthcheck-port: "3000"
+    alb.ingress.kubernetes.io/success-codes: "200"
 spec:
-  ingressClassName: alb
   rules:
     - http:
         paths:
@@ -19,4 +21,5 @@ spec:
               service:
                 name: nodeapp
                 port:
-                  number: 3000      
+                  number: 3000
+    
