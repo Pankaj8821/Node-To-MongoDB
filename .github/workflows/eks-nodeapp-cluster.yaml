@@ -40,7 +40,7 @@ jobs:
       # Terraform Apply
       - name: Terraform Apply
         working-directory: infra/terraform
-        run: terraform apply -auto-approve
+        run: terraform destroy -auto-approve
 
      
    
@@ -61,5 +61,5 @@ jobs:
       #working-directory: manifests
         run: |
          
-          kubectl delete -f k8s/
+          kubectl apply -f k8s/
           
