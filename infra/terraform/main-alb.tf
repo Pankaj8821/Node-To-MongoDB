@@ -90,6 +90,12 @@ vpcId: ${aws_vpc.main.id}
 EOF
   ]
 
-  depends_on = [aws_iam_role_policy_attachment.alb_attach]
+  
+  depends_on = [
+    aws_eks_cluster.eks,
+    aws_eks_node_group.this,
+    aws_iam_role_policy_attachment.alb_attach
+  ]
 }
+
 
