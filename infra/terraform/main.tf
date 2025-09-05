@@ -37,7 +37,7 @@ resource "aws_subnet" "public" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = cidrsubnet(var.vpc_cidr, 8, count.index)
   availability_zone = data.aws_availability_zones.available.names[count.index]
-  map_public_ip_on_launch = true
+  map_public_ip_on_launch = false 
 
   tags = {
     Name                            = "${var.cluster_name}-public-${count.index}"
@@ -104,5 +104,6 @@ resource "aws_route_table_association" "private_assoc" {
 data "aws_availability_zones" "available" {
   state = "available"
 }
+
 
 
