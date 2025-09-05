@@ -103,10 +103,11 @@ EOF
 
   depends_on = [
     aws_eks_cluster.eks,
-    aws_eks_node_group.node_group, # replace with your node group resource name
+    aws_eks_node_group.ng, # replace with your node group resource name
     aws_iam_role_policy_attachment.alb_attach
   ]
 }
+
 
 
 
