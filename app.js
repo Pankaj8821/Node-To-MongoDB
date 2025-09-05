@@ -36,7 +36,7 @@ app.use("/api/users", userRoutes);
 
 // Health check
 app.get("/healthz", (req, res) => {
-  res.json({ status: "ok" });
+  res.status(200).json({ status: "ok" });
 });
 
 // Start server
