@@ -60,5 +60,5 @@ jobs:
       - name: Deploment Apply
       #working-directory: manifests
         run: |
-          kubectl apply -f manifests/
+          kubectl apply -f k8s/
           
