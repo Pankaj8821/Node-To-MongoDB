@@ -19,7 +19,6 @@ spec:
         runAsUser: 1000
         fsGroup: 1000
       automountServiceAccountToken: false
-      allowPrivilegeEscalation: false
       containers:
         - name: nodeapp
           image: pankaj6262/nodeapp:latest
@@ -59,6 +58,7 @@ spec:
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
+
 
 
 
