@@ -59,13 +59,9 @@ spec:
             capabilities:
               drop: ["ALL"]
           volumeMounts:
-            - name: mongodb-persistent-storage
+            - name: mongodb-storage
               mountPath: /data/db
-  volumeClaimTemplates:
-    - metadata:
-        name: mongodb-persistent-storage
-      spec:
-        accessModes: ["ReadWriteOnce"]
-        resources:
-          requests:
-            storage: 2Gi
+      volumes:
+        - name: mongodb-storage
+          persistentVolumeClaim:
+            claimName: ebs-static-pvc   # ✅ use your existing PVC
