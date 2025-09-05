@@ -7,6 +7,16 @@ resource "aws_iam_openid_connect_provider" "oidc" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0afd60e1d"]
 }
+###########################
+# EKS Data Sources
+###########################
+data "aws_eks_cluster" "eks" {
+  name = aws_eks_cluster.eks.name
+}
+
+data "aws_eks_cluster_auth" "eks" {
+  name = aws_eks_cluster.eks.name
+}
 
 ###########################
 # IAM Role for ALB Controller (IRSA)
@@ -82,3 +92,4 @@ EOF
 
   depends_on = [aws_iam_role_policy_attachment.alb_attach]
 }
+
