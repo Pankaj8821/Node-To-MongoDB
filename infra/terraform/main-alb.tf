@@ -2,11 +2,12 @@
 # EKS Data Sources
 ###########################
 data "aws_eks_cluster" "eks" {
-  name = var.cluster_name
+   name = aws_eks_cluster.eks.name
 }
 
+
 data "aws_eks_cluster_auth" "eks" {
-  name = var.cluster_name
+  name = aws_eks_cluster.eks.name
 }
 
 ###########################
@@ -100,3 +101,4 @@ EOF
     aws_iam_role_policy_attachment.alb_attach
   ]
 }
+
