@@ -1,5 +1,4 @@
 # Nodeapp Deployment
-# Nodeapp Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,12 +24,6 @@ spec:
           image: pankaj6262/nodeapp:latest
           ports:
             - containerPort: 3000
-          readinessProbe:
-            httpGet:
-              path: /health
-              port: 3000
-            initialDelaySeconds: 5
-            periodSeconds: 10
           env:
             - name: MONGO_USERNAME
               valueFrom:
@@ -46,11 +39,26 @@ spec:
               value: mongodb.app.svc.cluster.local
             - name: MONGO_PORT
               value: "27017"
+          readinessProbe:
+            httpGet:
+              path: /healthz   # ✅ matches Node.js code
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /healthz   # ✅ matches Node.js code
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
               drop: ["ALL"]
+
 
 
 ---
