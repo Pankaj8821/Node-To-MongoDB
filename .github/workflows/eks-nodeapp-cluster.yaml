@@ -33,27 +33,17 @@ jobs:
         working-directory: infra/terraform
         run: terraform init -reconfigure
 
-      # Check if EKS cluster exists
-      - name: Check EKS Cluster
-        id: check
-        run: |
-          if aws eks describe-cluster --name $CLUSTER_NAME --region $AWS_REGION >/dev/null 2>&1; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      # Terraform Apply ONLY if cluster does not exist
-      - name: Terraform Apply for EKS (create cluster)
-        if: steps.check.outputs.exists == 'false'
+      # Terraform Plan 
+      - name: Terraform Plan
+        working-directory: infra/terraform
+        run: terraform plan
+      # Terraform Apply
+      - name: Terraform Apply
         working-directory: infra/terraform
         run: terraform apply -auto-approve
 
-      # Terraform Apply if cluster already exists (update only)
-      - name: Terraform Apply for EKS (update cluster)
-        if: steps.check.outputs.exists == 'true'
-        working-directory: infra/terraform
-        run: terraform apply -auto-approve
+     
+   
 
       # Install kubectl
       - name: Install kubectl
@@ -66,3 +56,9 @@ jobs:
       - name: Configure kubectl with EKS
         run: |
           aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
+
+      - name: Deploment Apply
+      #working-directory: manifests
+        run: |
+          kubectl apply -f manifests/
+          
