@@ -61,5 +61,5 @@ jobs:
       #working-directory: manifests
         run: |
           kubectl apply -f k8s/namespace.yaml
-          kubectl apply -f k8s/
+          kubectl delete -f k8s/
           
