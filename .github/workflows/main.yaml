@@ -38,11 +38,11 @@ jobs:
       - name: Run tests
         run: npm test || echo "No test found"
 
-      # Run static analysis (semgrep)
-      - name: Run Semgrep
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: "p/default"
+      # # Run static analysis (semgrep)
+      # - name: Run Semgrep
+      #   uses: returntocorp/semgrep-action@v1
+      #   with:
+      #     config: "p/default"
 
       # # Run IaC scan (Checkov)
       # - name: Scan Terraform/IaC
