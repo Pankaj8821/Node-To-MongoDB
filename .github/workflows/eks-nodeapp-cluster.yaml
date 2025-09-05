@@ -60,6 +60,6 @@ jobs:
       - name: Deploment Apply
       #working-directory: manifests
         run: |
-         
+          kubectl apply -f k8s/namespace.yaml
           kubectl apply -f k8s/
           
