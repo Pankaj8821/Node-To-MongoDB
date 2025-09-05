@@ -1,4 +1,4 @@
-# Setup AWS & Terraform 
+# Setup AWS & Terraform
 name: Eks-nodeapp-terraform-cluster
 
 on:
