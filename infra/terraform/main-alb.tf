@@ -61,6 +61,15 @@ resource "aws_iam_role_policy_attachment" "alb_attach" {
 # Install ALB Ingress Controller via Helm
 ###########################
 
+###########################
+# Kubernetes & Helm Providers
+###########################
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.eks.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.eks.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.eks.token
+}
+
 provider "helm" {
   kubernetes {
     host                   = data.aws_eks_cluster.eks.endpoint
@@ -68,6 +77,8 @@ provider "helm" {
     token                  = data.aws_eks_cluster_auth.eks.token
   }
 }
+
+
 
 resource "helm_release" "aws_lb_controller" {
   name       = "aws-load-balancer-controller"
@@ -90,13 +101,13 @@ vpcId: ${aws_vpc.main.id}
 EOF
   ]
 
-  
   depends_on = [
     aws_eks_cluster.eks,
-    aws_eks_node_group.ng,
+    aws_eks_node_group.node_group, # replace with your node group resource name
     aws_iam_role_policy_attachment.alb_attach
   ]
 }
+
 
 
 
