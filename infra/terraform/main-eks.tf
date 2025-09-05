@@ -66,12 +66,20 @@ resource "aws_eks_cluster" "eks" {
   name     = var.cluster_name
   role_arn = aws_iam_role.eks_cluster_role.arn
   version  = "1.29"
-
+ 
   vpc_config {
     subnet_ids = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
   }
 
-  enabled_cluster_log_types = ["api", "authenticator", "controllerManager"]
+
+
+  enabled_cluster_log_types = [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ]
 
   depends_on = [
     aws_iam_role_policy_attachment.eks_cluster_attach
@@ -101,3 +109,4 @@ resource "aws_eks_node_group" "ng" {
     aws_eks_cluster.eks
   ]
 }
+
