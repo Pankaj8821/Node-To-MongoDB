@@ -57,9 +57,9 @@ jobs:
         run: |
           aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
-      - name: Deploment Apply
+     # - name: Deploment Apply
       #working-directory: manifests
-        run: |
+      #  run: |
          
-          kubectl apply -f k8s/
+       #   kubectl apply -f k8s/
           
