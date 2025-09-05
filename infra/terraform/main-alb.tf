@@ -1,28 +1,26 @@
 ###########################
-# Enable OIDC for EKS
-###########################
-
-resource "aws_iam_openid_connect_provider" "oidc" {
-  url             = aws_eks_cluster.eks.identity[0].oidc[0].issuer
-  client_id_list  = ["sts.amazonaws.com"]
-  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0afd60e1d"]
-}
-###########################
 # EKS Data Sources
 ###########################
 data "aws_eks_cluster" "eks" {
-  name = aws_eks_cluster.eks.name
+  name = var.cluster_name
 }
 
 data "aws_eks_cluster_auth" "eks" {
-  name = aws_eks_cluster.eks.name
+  name = var.cluster_name
+}
+
+###########################
+# Enable OIDC for EKS
+###########################
+resource "aws_iam_openid_connect_provider" "oidc" {
+  url             = data.aws_eks_cluster.eks.identity[0].oidc[0].issuer
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = ["9e99a48a9960b14926bb7f3b02e22da0afd60e1d"]
 }
 
 ###########################
 # IAM Role for ALB Controller (IRSA)
-#"Terraform block defines a IAM policy document (data "aws_iam_policy_document") that allows the AWS ALB Ingress Controller (or AWS Load Balancer Controller) running in your EKS cluster to assume an IAM role using OIDC (OpenID Connect)."
 ###########################
-
 data "aws_iam_policy_document" "alb_assume_role" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]
@@ -34,7 +32,7 @@ data "aws_iam_policy_document" "alb_assume_role" {
 
     condition {
       test     = "StringEquals"
-      variable = "${replace(aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")}:sub"
+      variable = "${replace(data.aws_eks_cluster.eks.identity[0].oidc[0].issuer, "https://", "")}:sub"
       values   = ["system:serviceaccount:kube-system:alb-ingress-controller"]
     }
   }
@@ -58,10 +56,6 @@ resource "aws_iam_role_policy_attachment" "alb_attach" {
 }
 
 ###########################
-# Install ALB Ingress Controller via Helm
-###########################
-
-###########################
 # Kubernetes & Helm Providers
 ###########################
 provider "kubernetes" {
@@ -78,8 +72,9 @@ provider "helm" {
   }
 }
 
-
-
+###########################
+# Install ALB Ingress Controller via Helm
+###########################
 resource "helm_release" "aws_lb_controller" {
   name       = "aws-load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
@@ -102,13 +97,6 @@ EOF
   ]
 
   depends_on = [
-    aws_eks_cluster.eks,
-    aws_eks_node_group.ng, # replace with your node group resource name
     aws_iam_role_policy_attachment.alb_attach
   ]
 }
-
-
-
-
-
