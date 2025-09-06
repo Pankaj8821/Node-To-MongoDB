@@ -112,9 +112,12 @@ jobs:
           aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
       - name: Deploment Apply
-    #working-directory: manifests
+        working-directory: k8s
         run: |
           
-          kubectl apply -f k8s/namespace.yaml
-          kubectl delete -f k8s/deployment-nodeapp.yaml
-          kubectl apply -f k8s/
+          kubectl apply -f namespace.yaml
+          kubectl apply -f secrets.yaml
+          kubectl apply -f StatefulSet-mongodb.yaml
+         
+          kubectl apply -f deployment-nodeapp.yaml
+          kubectl apply -f ingress.yaml
