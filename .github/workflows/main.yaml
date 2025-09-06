@@ -14,6 +14,9 @@ permissions:
 jobs:
   build-test-scan:
     runs-on: ubuntu-latest
+    env:
+      AWS_REGION: ap-south-1     # AWS region
+      CLUSTER_NAME: eks-nodeapp-cluster
 
     steps:
       # Checkout repo
