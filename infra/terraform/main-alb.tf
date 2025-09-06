@@ -62,6 +62,11 @@ resource "aws_iam_role_policy_attachment" "alb_attach" {
 ###########################
 # Install ALB Ingress Controller via Helm
 ###########################
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.dev.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.dev.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.dev.token
+}
 
 provider "helm" {
   kubernetes {
@@ -94,3 +99,4 @@ EOF
 
   depends_on = [aws_iam_role_policy_attachment.alb_attach]
 }
+
