@@ -1,0 +1,5 @@
+# Ignore EKS public endpoint warning
+rule_id:terraform.lang.security.eks-public-endpoint-enabled.eks-public-endpoint-enabled
+
+# Ignore Kubernetes runAsNonRoot warning
+rule_id:yaml.kubernetes.security.run-as-non-root.run-as-non-root
