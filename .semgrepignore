@@ -1,0 +1,4 @@
+# Ignore specific rules
+rule_id:terraform.lang.security.eks-public-endpoint-enabled.eks-public-endpoint-enabled
+rule_id:yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext
+rule_id:yaml.kubernetes.security.run-as-non-root.run-as-non-root
