@@ -1,5 +1,0 @@
-# Ignore EKS public endpoint warning
-infra/terraform/main-eks.tf
-
-# Ignore MongoDB StatefulSet privilege escalation warnings
-k8s/StatefulSet-mongodb.yaml
