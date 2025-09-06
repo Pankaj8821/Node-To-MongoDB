@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import helmet from "helmet";
 import cors from "cors";
 import userRoutes from "./routes/userRoutes.js";
+import User from "./models/User.js";  // ✅ Import User model
 
 const app = express();
 
@@ -25,7 +26,19 @@ mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => console.log("✅ Connected to MongoDB"))
+  .then(async () => {
+    console.log("✅ Connected to MongoDB");
+
+    // 🔹 Seed default user if not exists
+    const defaultEmail = "alice@example.com";
+    const exists = await User.findOne({ email: defaultEmail });
+    if (!exists) {
+      await User.create({ name: "Alice", email: defaultEmail });
+      console.log("📦 Seed user 'Alice' inserted");
+    } else {
+      console.log("ℹ️ Seed user already exists, skipping");
+    }
+  })
   .catch(err => {
     console.error("❌ MongoDB Connection Error:", err);
     process.exit(1); // exit if DB fails
