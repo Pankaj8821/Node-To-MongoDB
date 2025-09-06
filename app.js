@@ -30,10 +30,10 @@ mongoose.connect(MONGO_URI, {
     console.log("✅ Connected to MongoDB");
 
     // 🔹 Seed default user if not exists
-    const defaultEmail = "pankaj@gmail.com";
+    const defaultEmail = "pratik@gmail.com";
     const exists = await User.findOne({ email: defaultEmail });
     if (!exists) {
-      await User.create({ name: "Pankaj", email: defaultEmail });
+      await User.create({ name: "Pratik", email: defaultEmail });
       console.log("📦 Seed user 'Pankaj' inserted");
     } else {
       console.log("ℹ️ Seed user already exists, skipping");
