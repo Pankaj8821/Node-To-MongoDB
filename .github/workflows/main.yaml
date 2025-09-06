@@ -46,9 +46,8 @@ jobs:
         uses: returntocorp/semgrep-action@v1
         with:
           config: "p/default"
-          exclude: |
-              node_modules/
-              infra/terraform/
+          include: "src/"
+          exclude: "infra/terraform/"
 
       # # Run IaC scan (Checkov)
       # - name: Scan Terraform/IaC
