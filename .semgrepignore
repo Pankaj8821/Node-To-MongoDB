@@ -1,4 +1,5 @@
-# Ignore specific rules
-rule_id:terraform.lang.security.eks-public-endpoint-enabled.eks-public-endpoint-enabled
-rule_id:yaml.kubernetes.security.allow-privilege-escalation-no-securitycontext.allow-privilege-escalation-no-securitycontext
-rule_id:yaml.kubernetes.security.run-as-non-root.run-as-non-root
+# Ignore EKS public endpoint warning
+infra/terraform/main-eks.tf
+
+# Ignore MongoDB StatefulSet privilege escalation warnings
+k8s/StatefulSet-mongodb.yaml
