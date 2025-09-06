@@ -69,8 +69,8 @@ resource "aws_eks_cluster" "eks" {
  
   vpc_config {
     subnet_ids = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
-    endpoint_public_access  = false  # ❌ disable public endpoint
-    endpoint_private_access = true    # ✅ only allow private access
+    endpoint_public_access  = true  #  disable public endpoint
+    endpoint_private_access = true    #  only allow private access
   }
 
 
@@ -111,6 +111,7 @@ resource "aws_eks_node_group" "ng" {
     aws_eks_cluster.eks
   ]
 }
+
 
 
 
