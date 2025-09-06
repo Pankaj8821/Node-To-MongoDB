@@ -121,3 +121,12 @@ jobs:
          
           kubectl apply -f deployment-nodeapp.yaml
           kubectl apply -f ingress.yaml
+       # Update deployment image with GitHub run number
+      - name: Update Nodeapp image
+        run: |
+          kubectl set image deployment/nodeapp \
+          nodeapp=pankaj6262/nodeapp:${{ github.run_number }} -n app
+          
+      #  Verify rollout
+      - name: Check rollout status
+        run: kubectl rollout status deployment/nodeapp -n app
