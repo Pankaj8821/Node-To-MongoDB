@@ -50,21 +50,7 @@ spec:
                 secretKeyRef:
                   name: mongodb-secret
                   key: password
-          command:
-            - sh
-            - -c
-            - |
-              # try mongosh then mongo; connect directly to mongodb-1 pod
-              HOST=mongodb-1.mongodb.app.svc.cluster.local
-              DB=testdb
-              echo "Connecting to $HOST"
-              if command -v mongosh >/dev/null 2>&1; then
-                mongosh "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${HOST}:27017/${DB}?authSource=admin" \
-                  --eval 'db.users.insertOne({name: "Alice", email: "alice@example.com"})'
-              else
-                mongo --username "${MONGO_USERNAME}" --password "${MONGO_PASSWORD}" --authenticationDatabase admin \
-                  --eval 'db.getSiblingDB("testdb").users.insertOne({name: "Alice", email: "alice@example.com"})' "${HOST}:27017"
-              fi
+         
           volumeMounts:
             - name: mongodb-local-storage
               mountPath: /data/db
