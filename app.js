@@ -13,7 +13,7 @@ app.use(express.json());
 
 // MongoDB connection from environment variables
 const username = process.env.MONGO_USERNAME || "admin";
-const password = process.env.MONGO_PASSWORD || "password123";
+const password = process.env.MONGO_PASSWORD || "StrongPassword123!";
 const host = process.env.MONGO_HOST || "127.0.0.1";
 const port = process.env.MONGO_PORT || 27017;
 const dbName = process.env.MONGO_DBNAME || "testdb";
