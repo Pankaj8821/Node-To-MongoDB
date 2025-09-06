@@ -30,12 +30,12 @@ spec:
       containers:
         - name: mongodb
           image: mongo:6.0.15
-          ##############
-          securityContext:
-            allowPrivilegeEscalation: false
-            runAsNonRoot: true
-            runAsUser: 999
-          ####################  
+          # ##############
+          # securityContext:
+          #   allowPrivilegeEscalation: false
+          #   runAsNonRoot: true
+          #   runAsUser: 999
+          # ####################  
           ports:
             - containerPort: 27017
           env:
