@@ -87,3 +87,20 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodeapp:${{ github.run_number }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodeapp:latest
+    # Install kubectl
+      - name: Install kubectl
+        run: |
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+    # Configure kubectl with EKS
+      - name: Configure kubectl with EKS
+        run: |
+          aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
+
+      - name: Deploment Apply
+    #working-directory: manifests
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/
