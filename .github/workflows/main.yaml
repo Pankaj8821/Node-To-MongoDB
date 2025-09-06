@@ -92,6 +92,13 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodeapp:${{ github.run_number }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodeapp:latest
+       # Configure AWS credential
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
     # Install kubectl
       - name: Install kubectl
         run: |
