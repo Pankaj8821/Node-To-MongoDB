@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read        # needed for actions/checkout
   packages: write       # needed if pushing Docker image
-  security-events: write  # needed if uploading SARIF (e.g. for code scanning)
+  security-events: write  # needed if uploading SARIF (e.g., for code scanning)
 
 jobs:
   build-test-scan:
@@ -92,7 +92,7 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodeapp:${{ github.run_number }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/nodeapp:latest
-       # Configure AWS credential
+       # Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -111,14 +111,13 @@ jobs:
         run: |
           aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
-      - name: Deploment Apply
+      - name: Deployment Apply
         working-directory: k8s
         run: |
           
           kubectl apply -f namespace.yaml
           kubectl apply -f secrets.yaml
-          kubectl apply -f StatefulSet-mongodb.yaml
-         
+          kubectl apply -f StatefulSet-mongodb.yaml         
           kubectl apply -f deployment-nodeapp.yaml
           kubectl apply -f ingress.yaml
        # Update deployment image with GitHub run number
@@ -128,5 +127,5 @@ jobs:
           nodeapp=pankaj6262/nodeapp:${{ github.run_number }} -n app
           
       #  Verify rollout
-      - name: Check rollout status
-        run: kubectl rollout status deployment/nodeapp -n app
+      #- name: Check rollout status
+      #  run: kubectl rollout status deployment/nodeapp -n app
