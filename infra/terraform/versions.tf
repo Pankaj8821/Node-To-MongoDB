@@ -2,10 +2,10 @@ terraform {
   required_version = ">= 1.3.0"
 
   backend "s3" {
-    bucket         = "pankaj0606-eks-app-file"         # 🔁 S3 bucket name (must exist)
-    key            = "eks-cluster/terraform.tfstate"   # 📄 path to tfstate file inside the bucket
-    region         = "ap-south-1"                       # 🌍 AWS region
-    dynamodb_table = "terraform-lock-table"          # 🔒 DynamoDB table for state locking
+    bucket         = "my-eks-terraform-state-pankaj-2025"         # S3 bucket name (must exist)
+    key            = "eks-cluster/terraform.tfstate"   # path to tfstate file inside the bucket
+    region         = "ap-south-1"                       # AWS region
+    dynamodb_table = "terraform-lock-table"          # DynamoDB table for state locking
     encrypt        = true
   }
 }
@@ -26,6 +26,7 @@ terraform {
     }
   }
 }
+
 
 
 
