@@ -76,18 +76,6 @@ docker-compose up --build
 •	IaC with Terraform (if infra is provisioned).
 •	Security scans using tfsec/checkov.
 •	Enforced least-privilege IAM policies.
-5. Runtime Security (Bonus)
-•	Optional integration with Falco, AppArmor, and Seccomp.
-📝 Deliverables for Evaluation
-•	Dockerfile (with security best practices).
-•	CI/CD pipeline config (GitHub Actions).
-•	Application code.
-•	README.md with setup instructions (this file).
-•	PDF report with risks, implementations, and production recommendations.
-📄 Report Requirements
-•	Identify security risks.
-•	Explain what was implemented and why.
-•	Suggest further production-grade hardening.
 
 # TERRAFORM
 # Create  S3 bucket  :
