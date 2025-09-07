@@ -26,7 +26,7 @@ docker run -p 3000:3000 node-to-mongo
 docker-compose up --build
 🔒 Security Implementation
 1. Docker Hardening
-•	Minimal base image (e.g., node:alpine).
+•	Minimal base image (e.g., node:alpine). 
 •	Multi-stage builds.
 •	Non-root user execution.
 •	Scanned with Trivy/Dockle.
