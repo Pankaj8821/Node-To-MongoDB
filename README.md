@@ -1,5 +1,4 @@
-![DevSecOps Flow](Untitled%20diagram%20_%20Mermaid%20Chart-2025-09-07.png)
-
+Untitled diagram _ Mermaid Chart-2025-09-07-154434.png
 # Node-To-MongoDB – DevSecOps Secure Deployment  
 
 ## Overview  
