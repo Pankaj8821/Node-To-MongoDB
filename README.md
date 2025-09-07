@@ -1,4 +1,28 @@
-![Uploading image.png…]()
+# Node-To-MongoDB – DevSecOps Secure Deployment  
+
+## 📌 Overview  
+This repository contains a **Node.js/Express** application connected to **MongoDB**, secured and containerized following **DevSecOps best practices**.  
+
+The goal is to demonstrate securing the **build, deployment, and runtime environments** using Docker, CI/CD pipelines, secrets management, infrastructure hardening, and runtime security.  
+
+---
+
+## 🚀 Features  
+- Secure Node.js + MongoDB microservice application.  
+- Docker hardening with multi-stage builds and non-root user.  
+- Integrated CI/CD security checks (Static Analysis, Container Scans).  
+- Secrets management (Vault, AWS Secrets Manager, or Kubernetes Secrets).  
+- Infrastructure-as-Code (IaC) scanning and least-privilege policies.  
+- Optional runtime security protections.  
+
+---
+
+## ⚙️ Setup Instructions  
+
+### 1. Clone Repository  
+```bash
+git clone https://github.com/Pankaj8821/Node-To-MongoDB.git
+cd Node-To-MongoDB
 
 
 
@@ -7,7 +31,7 @@
 **Overview**
 This repository contains a Node.js/Express application connected to MongoDB, secured and containerized following DevSecOps best practices.
 
-The goal is to demonstrate securing the build, deployment, and runtime environments using Docker, CI/CD pipelines, secrets management, infrastructure hardening, and runtime security.
+The goal is to demonstrate the secure configuration of build, deployment, and runtime environments using Docker, CI/CD pipelines, secrets management, infrastructure hardening, and runtime security.
 **Features**
 •	Secure Node.js + MongoDB microservice application.
 •	Docker hardening with multi-stage builds and a non-root user.
