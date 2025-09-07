@@ -1,4 +1,5 @@
-![Uploading Untitled diagram _ Mermaid Chart-2025-09-07-154434.png…]()
+![Uploading image.png…]()
+
 
 
 **Node-To-MongoDB – DevSecOps Secure Deployment**
