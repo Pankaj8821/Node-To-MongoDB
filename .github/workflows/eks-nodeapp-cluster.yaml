@@ -37,33 +37,33 @@ jobs:
       - name: Terraform Plan
         working-directory: infra/terraform
         run: terraform plan
-      #  # Terraform Apply
-      # - name: Terraform Apply
-      #   working-directory: infra/terraform
-      #   run: terraform apply -auto-approve
+      # Terraform Apply
+      - name: Terraform Apply
+        working-directory: infra/terraform
+        run: terraform apply -auto-approve
         
       # Terraform Destroy
-      - name: Terraform Destroy
-        working-directory: infra/terraform
-        run: terraform destroy -auto-approve
+      #- name: Terraform Destroy
+      #  working-directory: infra/terraform
+      #  run: terraform destroy -auto-approve
 
      
    
 
       # Install kubectl
-      - name: Install kubectl
-        run: |
-          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
+    #  - name: Install kubectl
+      #  run: |
+        #  curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+        # chmod +x kubectl
+        #  sudo mv kubectl /usr/local/bin/
 
       # Configure kubectl with EKS
-      - name: Configure kubectl with EKS
-        run: |
-          aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
+      #- name: Configure kubectl with EKS
+       # run: |
+        #  aws eks update-kubeconfig --name $CLUSTER_NAME --region $AWS_REGION
 
-      - name: Deploment Apply
+     # - name: Deployment Apply
       #working-directory: manifests
-        run: |
-          kubectl delete -f k8s/
+        #run: |
+        #  kubectl delete -f k8s/
           
