@@ -1,4 +1,3 @@
-Untitled diagram _ Mermaid Chart-2025-09-07-154434.png
 # Node-To-MongoDB – DevSecOps Secure Deployment  
 
 ## Overview  
